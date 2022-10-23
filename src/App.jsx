@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Game from "./Components/Game";
 import Landing from "./Components/Landing";
 
@@ -9,7 +9,11 @@ function App() {
     setStarted(true);
   }
 
-  return <div>{started ? <Game /> : <Landing start={startGame} />}</div>;
+  return (
+    <div>
+      {started ? <Game started={started} /> : <Landing start={startGame} />}
+    </div>
+  );
 }
 
 export default App;

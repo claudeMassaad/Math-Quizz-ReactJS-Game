@@ -1,9 +1,21 @@
 import React, { useState } from "react";
-import Answer from "./Answer";
+import Answers from "./Answers";
 import Question from "./Question";
 
 function Field(props) {
-  return <p>{props.Field}</p>;
+  return (
+    <>
+      <p>
+        <Question question={props.question} />
+      </p>
+      <p>
+        <Answers
+          correctAnswer={props.correctAnswer}
+          incorrectAnswers={props.incorrectAnswers}
+        />
+      </p>
+    </>
+  );
 }
 
 export default Field;

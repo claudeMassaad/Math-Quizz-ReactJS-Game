@@ -1,15 +1,31 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import "../style.css";
-
 import Field from "./Field";
+import Question from "./Question";
 
-function Game() {
+function Game(props) {
   //fetched data from api
   const [data, setData] = useState([]);
 
   //refactored data that I am going to use with this form:
-  const [field, setField] = useState(refactorData());
+  // field = [
+  //   {
+  //     question: q,
+  //     correctAnswer: correct_answer,
+  //     incorrectAnswers: incorrect_answers,
+  //     isHeld:false
+  //   } ,
+  //   ...
+  // ]
+  const [field, setField] = useState([
+    {
+      question: "hih",
+      correctAnswer: "",
+      incorrectAnswers: "",
+      isHeld: false,
+    },
+  ]);
 
   useEffect(() => {
     fetch(
@@ -17,9 +33,31 @@ function Game() {
     )
       .then((res) => res.json())
       .then((data) => setData(data.results));
-    console.log(data);
-    console.log(`Data length is ${data.length}`);
   }, []);
+
+  useEffect(() => {
+    console.log(`data length is ${data.length}`);
+    if (data.length > 0) {
+      setField(refactorData());
+      console.log("Field  is: ");
+      console.log(field);
+      // allFields = ()=>{
+      //   for (let i = 0 ;i<field.length;i++){
+      //     let curr = field[i];
+      //     retur
+      //   }
+      // }
+      allFields = field.map((instance) => {
+        return (
+          <Field
+            question={instance.question}
+            correctAnswer={instance.correctAnswer}
+            incorrectAnswers={instance.incorrectAnswers}
+          />
+        );
+      });
+    }
+  }, [data]);
 
   function refactorData() {
     const ans = [];
@@ -36,21 +74,26 @@ function Game() {
     return ans;
   }
 
-  function generateNewField(question, correct_answer, incorrect_answers) {
+  function generateNewField(q, correct_answer, incorrect_answers) {
     return {
-      question: question,
+      question: q,
       correctAnswer: correct_answer,
       incorrectAnswers: incorrect_answers,
+      isHeld: false,
     };
   }
 
-  console.log(`field is ${field}`);
+  let allFields = field.map((instance) => {
+    return (
+      <Field
+        question={instance.question}
+        correctAnswer={instance.correctAnswer}
+        incorrectAnswers={instance.incorrectAnswers}
+      />
+    );
+  });
 
-  // const questionAnswerField = data.map((field) => {} <Field question={field.question} choices={} />);
-
-  // console.log(`QUESTIONS is ${questions}`);
-
-  return <></>;
+  return <>{allFields}</>;
 }
 
 export default Game;
