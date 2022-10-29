@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import "../style.css";
+import Answer from "./Answer";
 import Field from "./Field";
-import Question from "./Question";
 
 function Game(props) {
-  //fetched data from api
-  const [data, setData] = useState([]);
-
   //refactored data that I am going to use with this form:
   // field = [
   //   {
@@ -15,85 +11,87 @@ function Game(props) {
   //     correctAnswer: correct_answer,
   //     incorrectAnswers: incorrect_answers,
   //     isHeld:false
+  //     id: ...,
   //   } ,
   //   ...
   // ]
-  const [field, setField] = useState([
-    {
-      question: "hih",
-      correctAnswer: "",
-      incorrectAnswers: "",
-      isHeld: false,
-    },
-  ]);
+  const [field, setField] = useState(props.data);
 
-  useEffect(() => {
-    fetch(
-      "https://opentdb.com/api.php?amount=5&category=19&difficulty=medium&type=multiple"
-    )
-      .then((res) => res.json())
-      .then((data) => setData(data.results));
-  }, []);
+  // function refactorData() {
+  //   const ans = [];
+  //   for (let i = 0; i < data.length; i++) {
+  //     let currData = data[i];
+  //     ans.push(
+  //       generateNewField(
+  //         currData.question,
+  //         currData.correct_answer,
+  //         currData.incorrect_answers
+  //       )
+  //     );
+  //   }
+  //   return ans;
+  // }
 
-  useEffect(() => {
-    console.log(`data length is ${data.length}`);
-    if (data.length > 0) {
-      setField(refactorData());
-      console.log("Field  is: ");
-      console.log(field);
-      // allFields = ()=>{
-      //   for (let i = 0 ;i<field.length;i++){
-      //     let curr = field[i];
-      //     retur
-      //   }
-      // }
-      allFields = field.map((instance) => {
-        return (
-          <Field
-            question={instance.question}
-            correctAnswer={instance.correctAnswer}
-            incorrectAnswers={instance.incorrectAnswers}
-          />
-        );
-      });
-    }
-  }, [data]);
+  // function generateNewField(q, correct_answer, incorrect_answers) {
+  //   return {
+  //     question: q,
+  //     correctAnswer: correct_answer,
+  //     incorrectAnswers: incorrect_answers,
+  //     isHeld: false,
+  //     id: nanoid(),
+  //   };
+  // }
 
-  function refactorData() {
-    const ans = [];
-    for (let i = 0; i < data.length; i++) {
-      let currData = data[i];
-      ans.push(
-        generateNewField(
-          currData.question,
-          currData.correct_answer,
-          currData.incorrect_answers
-        )
-      );
-    }
-    return ans;
+  {
+    /* <Field
+          question={data.question}
+          correctAnswer={data.correctAnswer}
+          // answers={data.answers}
+          // holdField={() => holdField(selectedAnswer)}
+        /> */
   }
-
-  function generateNewField(q, correct_answer, incorrect_answers) {
-    return {
-      question: q,
-      correctAnswer: correct_answer,
-      incorrectAnswers: incorrect_answers,
-      isHeld: false,
-    };
-  }
-
   let allFields = field.map((instance) => {
+    let gg = instance.answers;
+    console.log(gg);
+    let finalAnswers = gg.map((option) => {
+      return (
+        <Answer
+          ans={option.answer}
+          isHeld={option.isHeld}
+          holdField={() => holdField(instance.question, option.answer)}
+        />
+      );
+    });
     return (
-      <Field
-        question={instance.question}
-        correctAnswer={instance.correctAnswer}
-        incorrectAnswers={instance.incorrectAnswers}
-      />
+      <div className="oneField">
+        <p className="question">{instance.question}</p>
+        <p className="answers">{finalAnswers}</p>
+      </div>
     );
   });
 
-  return <>{allFields}</>;
+  function holdField(question, selectedAnswer) {
+    setField((oldField) =>
+      oldField.map((field) => {
+        return field.question === question
+          ? field.answers.map((answer) => {
+              return answer === selectedAnswer
+                ? { ...answer, isHeld: !answer.isHeld }
+                : answer;
+            })
+          : field;
+      })
+    );
+  }
+
+  return (
+    <body>
+      <div className="quizzPage">
+        <div>{allFields}</div>
+        <button className="checkAnswers">Check Answers</button>
+      </div>
+    </body>
+  );
 }
 
 export default Game;

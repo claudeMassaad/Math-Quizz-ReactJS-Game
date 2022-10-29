@@ -18,3 +18,48 @@ button {
   margin: auto auto;
   margin-top: 20px;
 }
+
+.quizzPage {
+  border: 2px solid red;
+  text-align: center;
+  padding-bottom: 20px;
+  margin: auto 200px;
+}
+
+.oneField {
+  border: 2px solid greenyellow;
+  padding-bottom: 10px;
+  text-align: left;
+  margin: auto 80px;
+}
+
+.checkAnswers {
+  border: 2px solid blue;
+  margin-top: 25px;
+}
+
+.answerBox {
+  height: 30px;
+  width: 60px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: 1px solid #4d5b9e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.answers {
+  display: flex;
+  flex-direction: row;
+}
+
+.ansValue {
+  font-size: 1rem;
+  color: #293264;
+}
+
+.question {
+  color: #293264;
+}
