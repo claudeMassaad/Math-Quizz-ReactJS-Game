@@ -62,11 +62,12 @@ function App() {
     let answers = incorrect_answers;
     answers.push(correct_answer);
 
-    //Shuffle array in the future
+    //Shuffle array
+    let shuffledArray = shuffle(answers);
 
     let final = [];
-    for (let i = 0; i < answers.length; i++) {
-      let curr = answers[i];
+    for (let i = 0; i < shuffledArray.length; i++) {
+      let curr = shuffledArray[i];
       final.push({
         answer: curr,
         isHeld: false,
@@ -75,15 +76,40 @@ function App() {
     return final;
   }
 
+  function shuffle(array) {
+    let shuffledArray = [];
+    let usedIndexes = [];
+
+    let i = 0;
+    while (i < array.length) {
+      let randomNumber = Math.floor(Math.random() * array.length);
+      if (!usedIndexes.includes(randomNumber)) {
+        shuffledArray.push(array[randomNumber]);
+        usedIndexes.push(randomNumber);
+        i++;
+      }
+    }
+    return shuffledArray;
+  }
+
   useEffect(() => {
     if (data.length) {
       setStarted(true);
-      // console.log(data);
     }
   }, [data]);
 
+  function startAgain() {
+    setStarted(false);
+  }
+
   return (
-    <div>{started ? <Game data={data} /> : <Landing start={startGame} />}</div>
+    <div>
+      {started ? (
+        <Game data={data} playAgain={startAgain} />
+      ) : (
+        <Landing start={startGame} />
+      )}
+    </div>
   );
 }
 

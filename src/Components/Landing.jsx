@@ -1,5 +1,4 @@
 import React from "react";
-// import "../style.css";
 
 function Landing(props) {
   return (
@@ -7,7 +6,9 @@ function Landing(props) {
       <main>
         <h1>Quizzical</h1>
         <p>Welcome to the ultimate Math Quizz</p>
-        <button onClick={props.start}>Start Quizz</button>
+        <button className="landingButton" onClick={props.start}>
+          Start Quizz
+        </button>
       </main>
     </body>
   );
